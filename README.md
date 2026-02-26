@@ -1,5 +1,5 @@
 # Backend 
-The back-end of this project: [Autoflex Java](https://github.com/tsemh/autoflexAngular)
+The back-end of this project: [Autoflex Java](https://github.com/tsemh/autoflexJava)
 
 # AngularManager
 
