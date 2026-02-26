@@ -1,0 +1,63 @@
+<div class="d-flex btn-top my-5">
+  <button class="btn btn-outline-success" (click)="newProduct(template)">Adicionar Produto</button>
+  <button class="btn btn-outline-success getAll" (click)="getAllProducts()">Buscar Todos</button>
+</div>
+
+<section class="information">
+
+  <div class="product">
+    <app-form *ngIf="productEnabled == true" [productForm]="productForm" [formEnabled]="formEnabled" [updateOn]="updateOn" [selectedProductId]="selectedProductId"></app-form>
+  </div>
+
+  <div class="products-list">
+      <div class="d-flex search-box">
+      <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar" #SearchInput>
+      <button type="button" class="btn btn-outline-success" (click)="searchProducts(SearchInput.value)">Pesquisar</button>
+    </div>
+    <table class="table table-hover">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col">#ID</th>
+          <th scope="col">Código</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Valor</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let product of products | paginate: { itemsPerPage: limit, currentPage: page }">
+        <tr class="products-line" (click)="enableProductInfo(product)">
+          <td>{{ product.id }}</td>
+          <td>{{ product.code }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.value }}</td>
+          <td>
+            <button class="btn btn-outline-danger" (click)="btnDelete(product.id)">Excluir</button>
+          </td>
+        </tr>
+        <tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+
+      <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+      
+      <div class="itemsPerPage">
+        <label for="itemsPerPage">Qtd. por página: </label>
+        <input type="number" class="itemsAmount" [value]="limit" (input)="updateLimit($event)">
+      </div>
+    </div>
+    
+  </div>
+
+</section>
+
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-form [productForm]="productForm" [formEnabled]="formEnabled"></app-form>
+  </div>
+
+</ng-template>

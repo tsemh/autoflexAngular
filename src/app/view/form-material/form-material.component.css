@@ -1,0 +1,81 @@
+.material-area {
+  padding: 0;
+  margin: 0;
+}
+
+.btn-update {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.btn-submit-cancel {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+}
+
+.mb-3 {
+  display: flex;
+  flex-direction: column;
+}
+
+.double-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+.small-input {
+  width: 20%;
+}
+
+.bigger-input {
+  width: 70%;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.input-border {
+  border: 1px solid #000; 
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

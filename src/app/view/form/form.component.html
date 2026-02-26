@@ -1,0 +1,162 @@
+<div class="product-area">
+  <div class="btn-update">
+    <button *ngIf="formEnabled === false" type="button" class="btn btn-outline-secondary" (click)="enableForm()">Atualizar</button>
+  </div>
+
+  <form [formGroup]="productForm" (submit)="submitForm($event)">
+    <div class="form-content">
+      <div class="mb-3">
+        <label for="codeLabel" class="form-label">Código</label>
+        <input type="text" class="form-control" [class.input-border]="inputsHaveBorder"
+         maxlength="50" formControlName="code" (keypress)="disablePressNumber($event, 'code')">
+         <div *ngIf="productForm.get('code')?.errors && productForm.get('code')?.touched" class="text-danger">
+          <div *ngIf="productForm.get('code')?.errors?.['required']">Código é obrigatório.</div>
+          <div *ngIf="productForm.get('code')?.errors?.['maxlength']">O código deve ter no máximo 50 caracteres.</div>
+          <div *ngIf="productForm.get('code')?.errors?.['minlength']">O código deve ter pelo menos 2 caracteres.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="nameLabel" class="form-label">Nome</label>
+        <input type="text" class="form-control" [class.input-border]="inputsHaveBorder"
+         maxlength="100" formControlName="name" (keypress)="disablePressNumber($event, 'name')">
+         <div *ngIf="productForm.get('name')?.errors && productForm.get('name')?.touched" class="text-danger">
+          <div *ngIf="productForm.get('name')?.errors?.['required']">Nome é obrigatório.</div>
+          <div *ngIf="productForm.get('name')?.errors?.['maxlength']">O nome deve ter no máximo 100 caracteres.</div>
+          <div *ngIf="productForm.get('name')?.errors?.['minlength']">O nome deve ter pelo menos 3 caracteres.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="valueLabel" class="form-label">Valor</label>
+        <input type="number" class="form-control" [class.input-border]="inputsHaveBorder"
+         formControlName="value" (keypress)="disablePressText($event, 'value')" min="0">
+        <div *ngIf="productForm.get('value')?.errors && productForm.get('value')?.touched" class="text-danger">
+          <div *ngIf="productForm.get('value')?.errors?.['required']">Valor é obrigatório.</div>
+          <div *ngIf="productForm.get('value')?.errors?.['min']">O valor deve ser maior ou igual a 0.</div>
+        </div>
+      </div>
+
+      <div *ngIf="updateOn" class="mb-3">
+        <hr>
+        <h6>Materiais vinculados</h6>
+        <div class="table-responsive" *ngIf="productMaterials.length > 0">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Quantidade em Estoque</th>
+                <th>Quantidade Necessária</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let relation of productMaterials">
+                <td>{{ getMaterialName(relation.rawMaterialId) }}</td>
+                <td>
+                  {{ getStockQuantity(relation.rawMaterialId) }}
+                </td>
+                <td>
+                  <span *ngIf="editingRelationId !== relation.id">{{ relation.quantityRequired }}</span>
+                  <input *ngIf="editingRelationId === relation.id" 
+                    type="number" 
+                    class="form-control form-control-sm" 
+                    [(ngModel)]="editingQuantity" 
+                    min="0"
+                    [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
+                  <div class="d-flex gap-2" style="justify-content: flex-end;">
+                    <button *ngIf="editingRelationId !== relation.id" 
+                      type="button" 
+                      class="btn btn-sm btn-outline-primary" 
+                      style="min-width: 80px; padding: 0.375rem 0.75rem; white-space: nowrap;"
+                      (click)="startEditRelation(relation)">
+                      Editar
+                    </button>
+                    <button *ngIf="editingRelationId === relation.id" 
+                      type="button" 
+                      class="btn btn-sm btn-success" 
+                      style="min-width: 80px; padding: 0.375rem 0.75rem; white-space: nowrap;"
+                      (click)="saveRelation(relation.id)">
+                      Salvar
+                    </button>
+                    <button *ngIf="editingRelationId === relation.id" 
+                      type="button" 
+                      class="btn btn-sm btn-secondary" 
+                      style="min-width: 80px; padding: 0.375rem 0.75rem; white-space: nowrap;"
+                      (click)="cancelEditRelation()">
+                      Cancelar
+                    </button>
+                    <button type="button" 
+                      class="btn btn-sm btn-outline-danger" 
+                      style="min-width: 80px; padding: 0.375rem 0.75rem; white-space: nowrap;"
+                      (click)="deleteRelation(relation.id)">
+                      Excluir
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="productMaterials.length === 0" class="alert alert-info">
+          Nenhum material vinculado a este produto.
+        </div>
+        <hr>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">
+          <input type="checkbox" [checked]="showMaterialSection" (change)="toggleMaterialSection($event)"> Adicionar material
+        </label>
+      </div>
+
+      <div *ngIf="showMaterialSection">
+        <div class="mb-3">
+          <label class="form-label">
+            <input type="checkbox" [checked]="showCreateNewMaterial" (change)="toggleCreateNewMaterial($event)"> Criar novo material
+          </label>
+        </div>
+
+        <div *ngIf="showCreateNewMaterial" class="border p-3 mb-3">
+          <h6>Novo Material</h6>
+          <div class="mb-2">
+            <label for="newMaterialCode" class="form-label">Código do Material</label>
+            <input type="text" class="form-control" formControlName="newMaterialCode" maxlength="50">
+          </div>
+          <div class="mb-2">
+            <label for="newMaterialName" class="form-label">Nome do Material</label>
+            <input type="text" class="form-control" formControlName="newMaterialName" maxlength="100">
+          </div>
+          <div class="mb-2">
+            <label for="newMaterialQuantity" class="form-label">Estoque do Material</label>
+            <input type="number" class="form-control" formControlName="newMaterialQuantity" min="0">
+          </div>
+          <div class="mb-2">
+            <label for="newRequiredQuantity" class="form-label">Quantidade Necessária</label>
+            <input type="number" class="form-control" formControlName="newRequiredQuantity" min="0">
+          </div>
+        </div>
+
+        <div *ngIf="!showCreateNewMaterial" class="mb-3">
+          <label for="materialSelect" class="form-label">Material (opcional)</label>
+          <select class="form-control" formControlName="rawMaterialId">
+            <option [value]="0">-- nenhum --</option>
+            <option *ngFor="let m of rawMaterials" [value]="m.id">{{m.name}} ({{m.code}})</option>
+          </select>
+        </div>
+
+        <div *ngIf="!showCreateNewMaterial" class="mb-3">
+          <label for="materialQuantity" class="form-label">Quantidade do Material (opcional)</label>
+          <input type="number" class="form-control" formControlName="materialQuantity" min="0">
+        </div>
+      </div>
+    
+      <div *ngIf="formEnabled == true" class="btn-submit-cancel">
+        <button type="submit" class="btn btn-outline-primary" (click)="submitProductForm()">Salvar</button>
+        <button type="button"class="btn btn-dark" (click)="disableForm()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</div>

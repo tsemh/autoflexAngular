@@ -1,0 +1,32 @@
+.btn-update {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-submit-cancel {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.mb-3 {
+  display: flex;
+  flex-direction: column;
+}
+.double-input {
+  display: flex;
+  justify-content: space-between;
+}
+.small-input {
+  width: 20%;
+}
+.bigger-input {
+  width: 70%;
+}
+.disabled {
+  pointer-events: none;
+}
+.input-border {
+  border: 1px solid #000; 
+}
+.form-control {
+  background-color: #fff;
+}

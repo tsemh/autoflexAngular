@@ -1,0 +1,60 @@
+<div class="d-flex btn-top my-5">
+  <button class="btn btn-outline-success" (click)="newRawMaterial(template)">Adicionar Material</button>
+  <button class="btn btn-outline-success getAll" (click)="getAllRawMaterials()">Buscar Todos</button>
+</div>
+
+<section class="information">
+
+  <div class="material">
+    <app-form-material *ngIf="materialEnabled == true" [materialForm]="materialForm" [formEnabled]="formEnabled" [updateOn]="updateOn" [selectedMaterialId]="selectedMaterialId"></app-form-material>
+  </div>
+
+  <div class="materials-list">
+    <div class="d-flex search-box">
+      <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar" #SearchInput>
+      <button type="button" class="btn btn-outline-success" (click)="searchRawMaterials(SearchInput.value)">Pesquisar</button>
+    </div>
+    <table class="table table-hover">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col">#ID</th>
+          <th scope="col">Código</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Quantidade</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let material of rawMaterials | paginate: { itemsPerPage: limit, currentPage: page }">
+        <tr class="materials-line" (click)="enableMaterialInfo(material)">
+          <td>{{ material.id }}</td>
+          <td>{{ material.code }}</td>
+          <td>{{ material.name }}</td>
+          <td>{{ material.quantity }}</td>
+          <td>
+            <button class="btn btn-outline-danger" (click)="btnDelete(material.id)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+      
+      <div class="itemsPerPage">
+        <label for="itemsPerPage">Qtd. por página: </label>
+        <input type="number" class="itemsAmount" [value]="limit" (input)="updateLimit($event)">
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="closeModal()">
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-form-material [materialForm]="materialForm" [formEnabled]="formEnabled"></app-form-material>
+  </div>
+
+</ng-template>

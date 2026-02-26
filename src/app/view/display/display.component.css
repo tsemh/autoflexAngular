@@ -1,0 +1,36 @@
+.information {
+  display: flex;
+  justify-content: space-evenly;
+}
+.product {
+  width: 35%
+}
+.products-list {
+  width: 50%;
+}
+.search-box {
+  margin-bottom: 30px;
+}
+.products-line {
+  cursor: pointer;
+}
+.table td {
+  width: 33.33%;
+}
+.table th {
+  width: 33.33%;
+}
+.btn-top {
+  display: flex;
+  justify-content: space-between;
+}
+.itemsAmount {
+  width: 50px;
+  height: 30px;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.itemsAmount::-webkit-inner-spin-button,
+.itemsAmount::-webkit-outer-spin-button {
+  display: none;
+}

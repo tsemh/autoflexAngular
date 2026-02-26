@@ -1,0 +1,6 @@
+.table-orange {
+  background-color: #ffe5b4 !important;
+}
+.table th, .table td {
+  vertical-align: middle;
+}
